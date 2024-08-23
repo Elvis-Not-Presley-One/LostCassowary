@@ -1,13 +1,37 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package lostcassowary;
 
 /**
  *
- * @author Tyler
+ * @author Lawnguy
  */
-public class File {
+public class File extends Region
+{
+    
+    private String regionFilePath;
+    
+    public final String getFilePath()
+    {
+       return regionFilePath;  
+    }
+    
+    public void setFilePath(String initalFilePath)
+    {
+     regionFilePath = initalFilePath; 
+    }
+    
+    
+    public String[] getfile()
+    {
+        
+    }
+    
+    public String getFileNameParseingInfo()
+    {
+        
+    }
+    
+    
+    
     
 }
