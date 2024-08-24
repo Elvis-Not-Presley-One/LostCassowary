@@ -15,18 +15,29 @@ public class FileHandling extends Region
      private final List<String> fileNameList = new ArrayList<>();
 
      
+     /**The getFilePath method gets the path to where the region files are located 
+      * 
+      * @return the path to the location of the region files 
+      */
     public final String getFilePath()
     {
        return regionFilePath;  
     }
     
+    /** the setFilePath method takes the users input and sends it off to the getFilePath method 
+     * 
+     * @param initalFilePath takes in the path from the user 
+     */
     public void setFilePath(String initalFilePath)
     {
      regionFilePath = initalFilePath; 
     }
     
-    
-    public List<String> getfiles()
+    /** the getFiles method obtains all of the file names in that path and stores it in an arrayList
+     * 
+     * @return all of the elements of the array containing all of the names 
+     */
+    public List<String> getFiles()
     {
      File directoryPath = new File(regionFilePath);
      String contents[] = directoryPath.list();
@@ -40,6 +51,10 @@ public class FileHandling extends Region
             return fileNameList;
     }
     
+    /** the getFileNameParseingInfo method removes all unnecessary info from the file name 
+     * 
+     * @return the array with all of the names of the files without the clunky info 
+     */
     public List<String> getFileNameParseingInfo()
     {
     

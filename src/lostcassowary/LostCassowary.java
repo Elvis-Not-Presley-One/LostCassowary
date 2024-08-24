@@ -68,7 +68,7 @@ public class LostCassowary {
          
        //  System.out.println("File path: " + files.getFilePath());
          
-         List<String> fileNames = files.getfiles(); // Now stores file names in the list
+         List<String> fileNames = files.getFiles(); // Now stores file names in the list
        
         System.out.println(fileNames);
     
