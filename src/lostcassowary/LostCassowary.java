@@ -78,7 +78,12 @@ public class LostCassowary {
             
             files.getFileNameParseingInfo();
             files.getTokens();
-            System.out.println(files.toString());
+            System.out.println("-----------------------------------------------------------------\n------------------------------------------------------");
+            System.out.println("X Region Cords: ");
+            System.out.println(files.getRegionXCords());
+            System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
+            System.out.println("Z Region Cords: ");
+            System.out.println(files.getRegionZCords());
 
         }
     }

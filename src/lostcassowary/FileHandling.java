@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/** The FileHandling class is meant to handle all of the work for the files 
+/**
+ * The FileHandling class is meant to handle all of the work for the files
  *
  * @author Lawnguy
  */
@@ -15,9 +16,8 @@ public class FileHandling extends Region
     private String regionFilePath;
     private final List<String> fileNameList = new ArrayList<>();
     private final List<String> parseingInfo = new ArrayList<>();
-    private final List<String> tokens = new ArrayList<>();
-    private final List<String> token = new ArrayList<>();
-
+    private final List<String> xToken = new ArrayList<>();
+    private final List<String> zToken = new ArrayList<>();
 
     /**
      * The getFilePath method gets the path to where the region files are
@@ -54,7 +54,7 @@ public class FileHandling extends Region
 
         System.out.println("A List of all file names in the path");
 
-        for (String content : contents) 
+        for (String content : contents)
         {
             fileNameList.add(content);
         }
@@ -86,33 +86,44 @@ public class FileHandling extends Region
      * The getTokens method gets the gets the tokens and splits them up into x
      * and z string numbers
      *
-     *  
+     *
      */
-    public void getTokens() 
+    public void getTokens()
     {
         //List<String> tokens = new ArrayList<>();
         //List<String> token = new ArrayList<>();
 
         for (String parseString : parseingInfo)
         {
-         StringTokenizer tokenizer = new StringTokenizer(parseString, " ");
+            StringTokenizer tokenizer = new StringTokenizer(parseString, " ");
 
-        while (tokenizer.hasMoreElements())
-        {
-            tokens.add(tokenizer.nextToken());
-            token.add(tokenizer.nextToken());
+            while (tokenizer.hasMoreElements()) 
+            {
+                xToken.add(tokenizer.nextToken());
+                zToken.add(tokenizer.nextToken());
+            }
         }
-      }
+
     }
-    
+
     /**
+     * The getRegionXCords method returns the x region cord from the file name
      *
-     * @return
+     * @return the x cord from the file names
      */
-    @Override
-    public String toString()
+    public List<String> getRegionXCords() 
     {
-       String str = String.format("X cords" + tokens + "Z Cords" + token);
-        return str;
+        return xToken;
     }
+
+    /**
+     * The getRegionZCords method returns the z region cord from the file name
+     *
+     * @return the z region cord from the file names
+     */
+    public List<String> getRegionZCords() 
+    {
+        return zToken;
+    }
+
 }
