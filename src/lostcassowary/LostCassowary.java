@@ -75,13 +75,10 @@ public class LostCassowary {
 
             files.getFileNameParseingInfo();
             System.out.println(files.getFileNameParseingInfo());
-
+            
             files.getFileNameParseingInfo();
-            System.out.println("---------------------------------\n------------------------------");
-            System.out.println(files.getZCords());
-            System.out.println(files.getZCords());
-            System.out.println("---------------------------------\n------------------------------");
-
+            files.getTokens();
+            System.out.println(files.toString());
 
         }
     }

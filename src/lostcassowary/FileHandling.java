@@ -15,8 +15,9 @@ public class FileHandling extends Region
     private String regionFilePath;
     private final List<String> fileNameList = new ArrayList<>();
     private final List<String> parseingInfo = new ArrayList<>();
-    private final List<String> xCords = new ArrayList<>();
-    private final List<String> zCords = new ArrayList<>();
+    private final List<String> tokens = new ArrayList<>();
+    private final List<String> token = new ArrayList<>();
+
 
     /**
      * The getFilePath method gets the path to where the region files are
@@ -85,45 +86,33 @@ public class FileHandling extends Region
      * The getTokens method gets the gets the tokens and splits them up into x
      * and z string numbers
      *
+     *  
      */
     public void getTokens() 
     {
+        //List<String> tokens = new ArrayList<>();
+        //List<String> token = new ArrayList<>();
 
-        for (String parsedString : parseingInfo) 
+        for (String parseString : parseingInfo)
         {
-            StringTokenizer cookie = new StringTokenizer(parsedString, " ");
+         StringTokenizer tokenizer = new StringTokenizer(parseString, " ");
 
-            if (cookie.hasMoreTokens()) 
-            {
-                xCords.add(cookie.nextToken());
-            }
-
-            if (cookie.hasMoreTokens()) 
-            {
-                zCords.add(cookie.nextToken());
-            }
-
+        while (tokenizer.hasMoreElements())
+        {
+            tokens.add(tokenizer.nextToken());
+            token.add(tokenizer.nextToken());
         }
+      }
     }
-
+    
     /**
-     * The getXCords method gets the x cords array
      *
-     * @return the populated array
+     * @return
      */
-    public List<String> getXCords() 
+    @Override
+    public String toString()
     {
-        return xCords;
+       String str = String.format("X cords" + tokens + "Z Cords" + token);
+        return str;
     }
-
-    /**
-     * the getZCords method gets the z cords array
-     *
-     * @return the populated array
-     */
-    public List<String> getZCords()
-    {
-        return zCords;
-    }
-
 }
