@@ -1,5 +1,6 @@
 package lostcassowary;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.List;
@@ -12,8 +13,9 @@ public class LostCassowary {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) 
+    public static void main(String[] args) throws IOException 
     {
 
         Scanner input = new Scanner(System.in);
@@ -68,7 +70,7 @@ public class LostCassowary {
             files.setFilePath(input.nextLine());
 
             //  System.out.println("File path: " + files.getFilePath());
-            List<String> fileNames = files.getFiles(); // Now stores file names in the list
+            List<String> fileNames = files.getFile(); // Now stores file names in the list
             System.out.println("---------------------------------\n------------------------------");
 
             System.out.println(fileNames);
@@ -85,6 +87,15 @@ public class LostCassowary {
             System.out.println("Z Region Cords: ");
             System.out.println(files.getRegionZCords());
 
+            System.out.println(files.getFiles());
+            
+            System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
+            System.out.println("Chunk Location Bytes");
+            System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
+            
+            region.getChunkLocations();
+            System.out.println(Arrays.toString(region.getChunkLocations()));
+            
         }
     }
 }

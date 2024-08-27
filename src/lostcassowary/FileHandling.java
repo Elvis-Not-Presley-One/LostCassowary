@@ -1,6 +1,7 @@
 package lostcassowary;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -10,11 +11,12 @@ import java.util.StringTokenizer;
  *
  * @author Lawnguy
  */
-public class FileHandling extends Region 
+public class FileHandling  
 {
 
     private String regionFilePath;
-    private final List<String> fileNameList = new ArrayList<>();
+    public final List<File> fileNameList = new ArrayList<>();
+    private final List<String> fileName = new ArrayList<>();
     private final List<String> parseingInfo = new ArrayList<>();
     private final List<String> xToken = new ArrayList<>();
     private final List<String> zToken = new ArrayList<>();
@@ -47,19 +49,34 @@ public class FileHandling extends Region
      *
      * @return all of the elements of the array containing all of the names
      */
-    public List<String> getFiles() 
+    public List<File> getFiles() 
     {
         File directoryPath = new File(regionFilePath);
-        String contents[] = directoryPath.list();
+        File contents[] = directoryPath.listFiles();
 
-        System.out.println("A List of all file names in the path");
+        System.out.println("Files -----------------------");
 
-        for (String content : contents)
+        for (File content : contents)
         {
             fileNameList.add(content);
         }
         return fileNameList;
     }
+    
+    public List<String> getFile() 
+    {
+        File directoryPath = new File(regionFilePath);
+        String contents[] = directoryPath.list();
+
+        System.out.println("File ---------------------------------");
+
+        for (String content : contents)
+        {
+            fileName.add(content);
+        }
+        return fileName;
+    }
+    
 
     /**
      * the getFileNameParseingInfo method removes all unnecessary info from the
@@ -72,7 +89,7 @@ public class FileHandling extends Region
     {
 
         //List<String> parseingInfo = new ArrayList<>();
-        for (String fileName : fileNameList) 
+        for (String fileName : fileName) 
         {
             String paresedInfo = fileName.replaceAll("[r.,mca]", " ");
             parseingInfo.add(paresedInfo);

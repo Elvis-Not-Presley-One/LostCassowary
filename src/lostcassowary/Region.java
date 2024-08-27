@@ -1,11 +1,17 @@
 package lostcassowary;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
  * @author Lawnguy
  */
-public class Region 
+public class Region extends FileHandling 
 {
 
     private String fileRegionParsedx;
@@ -41,7 +47,7 @@ public class Region
      * @param startingZCord ask user to enter an z coordinate from the Minecraft
      * world
      */
-    public void setRegionCords(int startingXCord, int startingZCord) 
+    public void setRegionCords(int startingXCord, int startingZCord)
     {
 
         xCord = startingXCord;
@@ -49,43 +55,46 @@ public class Region
 
     }
 
-    public int getChunkCords() 
+    public byte[] getChunkLocations() throws FileNotFoundException, IOException 
     {
+        //locations (1024 entries; 4 bytes each)
+
+
+        Object[] filenames = fileNameList.toArray();
+        
+        byte[] b = new byte[1024];
+
+        for (int i = 0; i < filenames.length; i++) 
+        {   
+
+            FileInputStream fileName = new FileInputStream((File) filenames[i]);
+            for (int j = 0; j < 1024; j++) 
+            {
+                fileName.read(b, 0, 4);
+                System.out.println(Arrays.toString(b));
+            }
+        }
+        return b;
 
     }
 
-    public void setChunkCords() 
-    {
+    public void setChunkLocations() {
 
     }
 
-    public byte getChunkLocations() 
-    {
+    public byte getChunkTimeStamps() {
 
     }
 
-    public void setChunkLocations() 
-    {
+    public void setChunkTimeStamps() {
 
     }
 
-    public byte getChunkTimeStamps() 
-    {
+    public byte getChunksAndOther() {
 
     }
 
-    public void setChunkTimeStamps() 
-    {
-
-    }
-
-    public byte getChunksAndOther() 
-    {
-
-    }
-
-    public void setChunksAndOther() 
-    {
+    public void setChunksAndOther() {
 
     }
 
