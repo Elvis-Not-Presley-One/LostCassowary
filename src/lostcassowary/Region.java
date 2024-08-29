@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class Region extends FileHandling
     private int z;
     private int regionX;
     private int regionZ;
+    private List<Byte> chunkByteLocations = new ArrayList<>();
+
 
     /**
      * The getRegionCords method finds the appropriate region coordinate from a
@@ -54,33 +57,42 @@ public class Region extends FileHandling
         zCord = startingZCord;
 
     }
+    
+    
+    public void setPath(String initalFilePath)
+    {
+        super.setFilePath(initalFilePath);
+    }
 
-    public byte[] getChunkLocations() throws FileNotFoundException, IOException 
+    public List<Byte> getChunkLocations() throws FileNotFoundException, IOException 
     {
         //locations (1024 entries; 4 bytes each)
-
-
-        Object[] filenames = fileNameList.toArray();
+        Object[] filenames = getFiles().toArray();
+        System.out.println(filenames.length);       
+        //byte[] a = new byte[1024 * filenames.length];
         
-        byte[] b = new byte[1024];
-
         for (int i = 0; i < filenames.length; i++) 
         {   
+         byte[] b = new byte[1024 * 4];
 
-            FileInputStream fileName = new FileInputStream((File) filenames[i]);
-            for (int j = 0; j < 1024; j++) 
+           FileInputStream fileName = new FileInputStream((File) filenames[i]); 
+                int cursor = 0;
+                for (int j = 0; j < 1024; j++)
+                {
+                    fileName.read(b, cursor, 4);
+                    cursor += 4;
+                }
+            fileName.close();
+            for (int k = 0; k < b.length; k++)
             {
-                fileName.read(b, 0, 4);
-                System.out.println(Arrays.toString(b));
+            chunkByteLocations.add(b[k]);
             }
+            System.out.println(chunkByteLocations);
         }
-        return b;
+        return chunkByteLocations;
 
     }
 
-    public void setChunkLocations() {
-
-    }
 
     public byte getChunkTimeStamps() {
 

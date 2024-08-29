@@ -67,9 +67,10 @@ public class LostCassowary {
             }
 
             System.out.println("Please copy and Paste your Path to the regionFiles");
-            files.setFilePath(input.nextLine());
-
-            //  System.out.println("File path: " + files.getFilePath());
+            String initalFilePath = input.nextLine();
+            
+            files.setFilePath(initalFilePath);
+            System.out.println("File path: " + files.getFilePath());
             List<String> fileNames = files.getFile(); // Now stores file names in the list
             System.out.println("---------------------------------\n------------------------------");
 
@@ -87,15 +88,14 @@ public class LostCassowary {
             System.out.println("Z Region Cords: ");
             System.out.println(files.getRegionZCords());
 
-            System.out.println(files.getFiles());
+            region.setFilePath(initalFilePath);
             
+            System.out.println(files.getFiles());
             System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
             System.out.println("Chunk Location Bytes");
             System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
-            
-            region.getChunkLocations();
-            System.out.println(Arrays.toString(region.getChunkLocations()));
-            
+            System.out.println(files.fileNameList.size());
+            System.out.println(region.getChunkLocations());
         }
     }
 }

@@ -56,6 +56,8 @@ public class FileHandling
 
         System.out.println("Files -----------------------");
 
+        fileNameList.clear();
+        
         for (File content : contents)
         {
             fileNameList.add(content);
@@ -70,6 +72,8 @@ public class FileHandling
 
         System.out.println("File ---------------------------------");
 
+        fileName.clear();
+        
         for (String content : contents)
         {
             fileName.add(content);
@@ -89,9 +93,9 @@ public class FileHandling
     {
 
         //List<String> parseingInfo = new ArrayList<>();
-        for (String fileName : fileName) 
+        for (String fileFirstParse : fileName) 
         {
-            String paresedInfo = fileName.replaceAll("[r.,mca]", " ");
+            String paresedInfo = fileFirstParse.replaceAll("[r.,mca]", " ");
             parseingInfo.add(paresedInfo);
         }
 
