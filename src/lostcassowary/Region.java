@@ -23,8 +23,8 @@ public class Region extends FileHandling
     private int z;
     private int regionX;
     private int regionZ;
-    private List<Byte> chunkByteLocations = new ArrayList<>();
-
+    private final List<Byte> chunkByteLocations = new ArrayList<>();
+    private final List<Byte> chunkTimeStamps = new ArrayList<>();
 
     /**
      * The getRegionCords method finds the appropriate region coordinate from a
@@ -50,42 +50,61 @@ public class Region extends FileHandling
      * @param startingZCord ask user to enter an z coordinate from the Minecraft
      * world
      */
-    public void setRegionCords(int startingXCord, int startingZCord)
+    public void setRegionCords(int startingXCord, int startingZCord) 
     {
 
         xCord = startingXCord;
         zCord = startingZCord;
 
     }
-    
-    
-    public void setPath(String initalFilePath)
+
+    /**
+     * The setChunkLocations takes the user input and sends it back to the
+     * setPath method in FileHadling class
+     *
+     * @param initalFilePath users path to the directory where the region files
+     * are held
+     */
+    public void setChunkLocations(String initalFilePath)
     {
         super.setFilePath(initalFilePath);
     }
 
-    public List<Byte> getChunkLocations() throws FileNotFoundException, IOException 
+    /** 
+     * The getChunkLocations reads the first 4 bytes 1024 times in each file 
+     * and stores it in an arrayList 
+     *
+     * @return chunkByteLocations the array that each element is one byte 
+     * of the 4
+     * @throws java.io.FileNotFoundException throws null error when there 
+     * are not files 
+     * @throws IOException
+     */
+    public List<Byte> getChunkLocations() throws FileNotFoundException,
+            IOException 
     {
         //locations (1024 entries; 4 bytes each)
-        Object[] filenames = getFiles().toArray();
-        System.out.println(filenames.length);       
-        //byte[] a = new byte[1024 * filenames.length];
         
-        for (int i = 0; i < filenames.length; i++) 
-        {   
-         byte[] b = new byte[1024 * 4];
+        Object[] filenames = getFiles().toArray();
+        System.out.println(filenames.length);
 
-           FileInputStream fileName = new FileInputStream((File) filenames[i]); 
+        for (int i = 0; i < filenames.length; i++) 
+        {
+            byte[] b = new byte[1024 * 4];
+
+            try (FileInputStream fileName = new FileInputStream((File) filenames[i])) 
+            {
                 int cursor = 0;
-                for (int j = 0; j < 1024; j++)
+
+                for (int j = 0; j < 1024; j++) 
                 {
                     fileName.read(b, cursor, 4);
                     cursor += 4;
                 }
-            fileName.close();
+            }
             for (int k = 0; k < b.length; k++)
             {
-            chunkByteLocations.add(b[k]);
+                chunkByteLocations.add(b[k]);
             }
             System.out.println(chunkByteLocations);
         }
@@ -93,21 +112,53 @@ public class Region extends FileHandling
 
     }
 
+    /**
+     * The getChunkTimeStamps method gets the first 4 bytes of each file after 
+     * 4096 bytes and saves the data into and ArrayList
+     * 
+     * @return chunkTimeStamps the array that holds the data, each element 
+     * is one byte
+     * @throws FileNotFoundException throws a null when there is not file in 
+     * the directory 
+     * @throws IOException
+     */
+    public List<Byte> getChunkTimeStamps() throws FileNotFoundException, 
+            IOException 
+    {
+          //locations (1024 entries; 4 bytes each)
+        
+        Object[] filename = getFiles().toArray();
+        System.out.println(filename.length);
 
-    public byte getChunkTimeStamps() {
+        for (int i = 0; i < filename.length; i++) 
+        {
+            byte[] a = new byte[1024 * 4];
+
+            try (FileInputStream fileNames = new FileInputStream((File) filename[i])) 
+            {
+                int cursor = 4096;
+
+                for (int j = 0; j < 1024; j++) 
+                {
+                    fileNames.read(a, cursor, 4);
+                    cursor += 4;
+                }
+            }
+            for (int k = 0; k < a.length; k++)
+            {
+                chunkTimeStamps.add(a[k]);
+            }
+            System.out.println(chunkTimeStamps);
+        }
+        return chunkTimeStamps;
 
     }
 
-    public void setChunkTimeStamps() {
+    public byte getChunksAndOther() 
+    {
 
     }
 
-    public byte getChunksAndOther() {
-
-    }
-
-    public void setChunksAndOther() {
-
-    }
+   
 
 }

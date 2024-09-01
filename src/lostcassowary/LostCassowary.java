@@ -94,7 +94,6 @@ public class LostCassowary {
             System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
             System.out.println("Chunk Location Bytes");
             System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
-            System.out.println(files.fileNameList.size());
             System.out.println(region.getChunkLocations());
         }
     }
