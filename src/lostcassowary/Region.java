@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,7 @@ public class Region extends FileHandling
     private int regionZ;
     private final List<Byte> chunkByteLocations = new ArrayList<>();
     private final List<Byte> chunkTimeStamps = new ArrayList<>();
+    private final List<Integer> chunkByteBigEndian = new ArrayList<>();
 
     /**
      * The getRegionCords method finds the appropriate region coordinate from a
@@ -80,38 +83,48 @@ public class Region extends FileHandling
      * are not files 
      * @throws IOException
      */
-    public List<Byte> getChunkLocations() throws FileNotFoundException,
-            IOException 
+   public List<Byte> getChunkLocations() throws FileNotFoundException, IOException 
+{
+    // Locations (1024 entries; 4 bytes each)
+    
+    Object[] filenames = getFiles().toArray();
+    System.out.println(filenames.length);
+
+    for (int i = 0; i < filenames.length; i++) 
     {
-        //locations (1024 entries; 4 bytes each)
-        
-        Object[] filenames = getFiles().toArray();
-        System.out.println(filenames.length);
+        byte[] b = new byte[4096]; 
 
-        for (int i = 0; i < filenames.length; i++) 
+        try (FileInputStream fileName = new FileInputStream((File) filenames[i])) 
         {
-            byte[] b = new byte[1024 * 4];
+            fileName.read(b); 
 
-            try (FileInputStream fileName = new FileInputStream((File) filenames[i])) 
+            for (int j = 0; j < 1024; j++) 
             {
-                int cursor = 0;
+                int start = j * 4; 
+                
+                int bigEndianInt = ((b[start] & 0xFF) << 16) |
+                                   ((b[start + 1] & 0xFF) << 8) |
+                                   (b[start + 2] & 0xFF);
+                
+               chunkByteBigEndian.add(bigEndianInt);
 
-                for (int j = 0; j < 1024; j++) 
-                {
-                    fileName.read(b, cursor, 4);
-                    cursor += 4;
-                }
+                chunkByteLocations.add(b[start]);
+                chunkByteLocations.add(b[start + 1]);
+                chunkByteLocations.add(b[start + 2]);
+
+                chunkByteLocations.add(b[start + 3]);
             }
-            for (int k = 0; k < b.length; k++)
-            {
-                chunkByteLocations.add(b[k]);
-            }
-            System.out.println(chunkByteLocations);
         }
-        return chunkByteLocations;
-
     }
-
+    return chunkByteLocations;
+}
+   public List<Integer> getChunkLocationOffset()
+   {
+       return chunkByteBigEndian;
+   }
+   
+   
+   
     /**
      * The getChunkTimeStamps method gets the first 4 bytes of each file after 
      * 4096 bytes and saves the data into and ArrayList
@@ -136,7 +149,9 @@ public class Region extends FileHandling
 
             try (FileInputStream fileNames = new FileInputStream((File) filename[i])) 
             {
-                int cursor = 4096;
+                int cursor = 0;
+                
+                fileNames.skip(4096);
 
                 for (int j = 0; j < 1024; j++) 
                 {
@@ -148,7 +163,7 @@ public class Region extends FileHandling
             {
                 chunkTimeStamps.add(a[k]);
             }
-            System.out.println(chunkTimeStamps);
+            //System.out.println(chunkTimeStamps);
         }
         return chunkTimeStamps;
 
