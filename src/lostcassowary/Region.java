@@ -29,6 +29,7 @@ public class Region extends FileHandling
     private final List<Byte> chunkByteLocations = new ArrayList<>();
     private final List<Byte> chunkTimeStamps = new ArrayList<>();
     private final List<Integer> chunkByteBigEndian = new ArrayList<>();
+    private final List<Instant> instants = new ArrayList<>();
 
     /**
      * The getRegionCords method finds the appropriate region coordinate from a
@@ -95,7 +96,7 @@ public class Region extends FileHandling
         {
             byte[] b = new byte[4096];
 
-            try (FileInputStream fileName = new FileInputStream((File) filenames[i])) 
+            try (FileInputStream fileName = new FileInputStream((File) filenames[i]))
             {
                 fileName.read(b);
 
@@ -137,13 +138,13 @@ public class Region extends FileHandling
      * The getChunkTimeStamps method gets the first 4 bytes of each file after
      * 4096 bytes and saves the data into and ArrayList
      *
-     * @return instant, the time that each chunk was seen by the player 
-     * 
+     * @return instant, the time that each chunk was seen by the player
+     *
      * @throws FileNotFoundException throws a null when there is not file in the
      * directory
      * @throws IOException
      */
-    public Instant getChunkTimeStamps() throws FileNotFoundException,
+    public List<Instant> getChunkTimeStamps() throws FileNotFoundException,
             IOException 
     {
         //locations (1024 entries; 4 bytes each)
@@ -171,22 +172,26 @@ public class Region extends FileHandling
             {
                 chunkTimeStamps.add(a[k]);
             }
-            //System.out.println(chunkTimeStamps);
         }
 
-        byte[] epochsecondsByteArray = new byte[chunkTimeStamps.size()];
-        
-        for (int i = 0; i < chunkTimeStamps.size(); i++) 
+        for (int i = 0; i < chunkTimeStamps.size(); i += 4) 
         {
-            epochsecondsByteArray[i] = chunkTimeStamps.get(i);
+            byte[] epochsecondsByteArray = new byte[4];
+
+            for (int j = 0; j < 4; j++) 
+            {
+                epochsecondsByteArray[j] = chunkTimeStamps.get(i + j);
+            }
+
+            int epochseconds = ByteBuffer.wrap(epochsecondsByteArray).getInt();
+
+            Instant instant = Instant.ofEpochSecond(epochseconds);
+
+            instants.add(instant);
+
+            //System.out.println(instant);
         }
-
-        int epochseconds = ByteBuffer.wrap(epochsecondsByteArray).getInt();
-        System.out.println(epochseconds);
-        java.time.Instant instant = java.time.Instant.ofEpochSecond(epochseconds);
-
-        return instant;
-
+        return instants;
     }
 
     public byte getChunksAndOther() 
