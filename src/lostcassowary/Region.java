@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,78 +69,85 @@ public class Region extends FileHandling
      * @param initalFilePath users path to the directory where the region files
      * are held
      */
-    public void setChunkLocations(String initalFilePath)
+    public void setChunkLocations(String initalFilePath) 
     {
         super.setFilePath(initalFilePath);
     }
 
-    /** 
-     * The getChunkLocations reads the first 4 bytes 1024 times in each file 
-     * and stores it in an arrayList 
+    /**
+     * The getChunkLocations reads the first 4 bytes 1024 times in each file and
+     * stores it in an arrayList
      *
-     * @return chunkByteLocations the array that each element is one byte 
-     * of the 4
-     * @throws java.io.FileNotFoundException throws null error when there 
-     * are not files 
+     * @return chunkByteLocations the array that each element is one byte of the
+     * 4
+     * @throws java.io.FileNotFoundException throws null error when there are
+     * not files
      * @throws IOException
      */
-   public List<Byte> getChunkLocations() throws FileNotFoundException, IOException 
-{
-    // Locations (1024 entries; 4 bytes each)
-    
-    Object[] filenames = getFiles().toArray();
-    System.out.println(filenames.length);
-
-    for (int i = 0; i < filenames.length; i++) 
+    public List<Byte> getChunkLocations() throws FileNotFoundException, IOException 
     {
-        byte[] b = new byte[4096]; 
+        // Locations (1024 entries; 4 bytes each)
 
-        try (FileInputStream fileName = new FileInputStream((File) filenames[i])) 
+        Object[] filenames = getFiles().toArray();
+        System.out.println(filenames.length);
+
+        for (int i = 0; i < filenames.length; i++) 
         {
-            fileName.read(b); 
+            byte[] b = new byte[4096];
 
-            for (int j = 0; j < 1024; j++) 
+            try (FileInputStream fileName = new FileInputStream((File) filenames[i])) 
             {
-                int start = j * 4; 
-                
-                int bigEndianInt = ((b[start] & 0xFF) << 16) |
-                                   ((b[start + 1] & 0xFF) << 8) |
-                                   (b[start + 2] & 0xFF);
-                
-               chunkByteBigEndian.add(bigEndianInt);
+                fileName.read(b);
 
-                chunkByteLocations.add(b[start]);
-                chunkByteLocations.add(b[start + 1]);
-                chunkByteLocations.add(b[start + 2]);
+                for (int j = 0; j < 1024; j++) 
+                {
+                    int start = j * 4;
 
-                chunkByteLocations.add(b[start + 3]);
+                    int bigEndianInt = ((b[start] & 0xFF) << 16)
+                            | ((b[start + 1] & 0xFF) << 8)
+                            | (b[start + 2] & 0xFF);
+
+                    int chunkOffset = bigEndianInt * 4096;
+
+                    chunkByteBigEndian.add(chunkOffset);
+
+                    chunkByteLocations.add(b[start]);
+                    chunkByteLocations.add(b[start + 1]);
+                    chunkByteLocations.add(b[start + 2]);
+
+                    chunkByteLocations.add(b[start + 3]);
+                }
             }
         }
+        return chunkByteLocations;
     }
-    return chunkByteLocations;
-}
-   public List<Integer> getChunkLocationOffset()
-   {
-       return chunkByteBigEndian;
-   }
-   
-   
-   
+
     /**
-     * The getChunkTimeStamps method gets the first 4 bytes of each file after 
+     * The getChunkLocations method just returns the offset value array
+     * separately
+     *
+     * @return the chunk offset array
+     */
+    public List<Integer> getChunkLocationOffset() 
+    {
+        return chunkByteBigEndian;
+    }
+
+    /**
+     * The getChunkTimeStamps method gets the first 4 bytes of each file after
      * 4096 bytes and saves the data into and ArrayList
+     *
+     * @return instant, the time that each chunk was seen by the player 
      * 
-     * @return chunkTimeStamps the array that holds the data, each element 
-     * is one byte
-     * @throws FileNotFoundException throws a null when there is not file in 
-     * the directory 
+     * @throws FileNotFoundException throws a null when there is not file in the
+     * directory
      * @throws IOException
      */
-    public List<Byte> getChunkTimeStamps() throws FileNotFoundException, 
+    public Instant getChunkTimeStamps() throws FileNotFoundException,
             IOException 
     {
-          //locations (1024 entries; 4 bytes each)
-        
+        //locations (1024 entries; 4 bytes each)
+
         Object[] filename = getFiles().toArray();
         System.out.println(filename.length);
 
@@ -150,7 +158,7 @@ public class Region extends FileHandling
             try (FileInputStream fileNames = new FileInputStream((File) filename[i])) 
             {
                 int cursor = 0;
-                
+
                 fileNames.skip(4096);
 
                 for (int j = 0; j < 1024; j++) 
@@ -159,13 +167,25 @@ public class Region extends FileHandling
                     cursor += 4;
                 }
             }
-            for (int k = 0; k < a.length; k++)
+            for (int k = 0; k < a.length; k++) 
             {
                 chunkTimeStamps.add(a[k]);
             }
             //System.out.println(chunkTimeStamps);
         }
-        return chunkTimeStamps;
+
+        byte[] epochsecondsByteArray = new byte[chunkTimeStamps.size()];
+        
+        for (int i = 0; i < chunkTimeStamps.size(); i++) 
+        {
+            epochsecondsByteArray[i] = chunkTimeStamps.get(i);
+        }
+
+        int epochseconds = ByteBuffer.wrap(epochsecondsByteArray).getInt();
+        System.out.println(epochseconds);
+        java.time.Instant instant = java.time.Instant.ofEpochSecond(epochseconds);
+
+        return instant;
 
     }
 
@@ -173,7 +193,5 @@ public class Region extends FileHandling
     {
 
     }
-
-   
 
 }
