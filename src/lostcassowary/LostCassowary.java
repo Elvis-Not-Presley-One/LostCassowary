@@ -21,6 +21,7 @@ public class LostCassowary {
         Scanner input = new Scanner(System.in);
         Region region = new Region();
         FileHandling files = new FileHandling();
+        Chunks chunk = new Chunks();
 
         String endProgram = "Cancel";
         String regionCordCalc = "Yes";
@@ -98,9 +99,10 @@ public class LostCassowary {
             System.out.println("\n\n-------------------------------------\n\n");
             
             System.out.println(region.getChunkLocationOffset());
-            System.out.println(region.getChunkTimeStamps());
-            
-            
+           // System.out.println(region.getChunkTimeStamps());
+           
+           chunk.setFileNames(initalFilePath);
+           System.out.println(Arrays.toString(chunk.getNBTData()));
             
         }
     }

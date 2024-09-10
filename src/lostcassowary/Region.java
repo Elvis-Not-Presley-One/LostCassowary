@@ -31,7 +31,7 @@ public class Region extends FileHandling
     private final List<Byte> chunkTimeStamps = new ArrayList<>();
     private final List<Integer> chunkByteBigEndian = new ArrayList<>();
     private final List<Instant> instants = new ArrayList<>();
-
+    
     /**
      * The getRegionCords method finds the appropriate region coordinate from a
      * set of normal Minecraft coordinates
@@ -149,7 +149,11 @@ public class Region extends FileHandling
             IOException 
     {
         //locations (1024 entries; 4 bytes each)
-
+        /*
+        Should put all of this into a csv file with the chunk and region so 
+        it can be used for later on 
+        */
+        
         Object[] filename = getFiles().toArray();
         System.out.println(filename.length);
 
@@ -195,12 +199,5 @@ public class Region extends FileHandling
         return instants;
     }
 
-    public byte getChunksAndOther() 
-    {
-
-        
-        
-        
-    }
-
+ 
 }
