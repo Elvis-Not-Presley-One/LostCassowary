@@ -91,7 +91,7 @@ public class Region extends FileHandling
         // Locations (1024 entries; 4 bytes each)
 
         Object[] filenames = getFiles().toArray();
-        System.out.println(filenames.length);
+       // System.out.println(filenames.length);
 
         for (int i = 0; i < filenames.length; i++) 
         {
@@ -155,7 +155,7 @@ public class Region extends FileHandling
         */
         
         Object[] filename = getFiles().toArray();
-        System.out.println(filename.length);
+        //System.out.println(filename.length);
 
         for (int i = 0; i < filename.length; i++) 
         {

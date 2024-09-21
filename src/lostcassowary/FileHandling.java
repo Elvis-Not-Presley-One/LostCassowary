@@ -54,7 +54,7 @@ public class FileHandling
         File directoryPath = new File(regionFilePath);
         File contents[] = directoryPath.listFiles();
 
-        System.out.println("Files -----------------------");
+        //System.out.println("Files -----------------------");
 
         fileNameList.clear();
         
@@ -70,7 +70,7 @@ public class FileHandling
         File directoryPath = new File(regionFilePath);
         String contents[] = directoryPath.list();
 
-        System.out.println("File ---------------------------------");
+        //System.out.println("File ---------------------------------");
 
         fileName.clear();
         

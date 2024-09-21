@@ -71,39 +71,31 @@ public class LostCassowary {
             String initalFilePath = input.nextLine();
             
             files.setFilePath(initalFilePath);
-            System.out.println("File path: " + files.getFilePath());
+            files.getFilePath();
             List<String> fileNames = files.getFile(); // Now stores file names in the list
             System.out.println("---------------------------------\n------------------------------");
 
             System.out.println(fileNames);
 
             files.getFileNameParseingInfo();
-            System.out.println(files.getFileNameParseingInfo());
+            files.getFileNameParseingInfo();
             
             files.getFileNameParseingInfo();
             files.getTokens();
-            System.out.println("-----------------------------------------------------------------\n------------------------------------------------------");
-            System.out.println("X Region Cords: ");
-            System.out.println(files.getRegionXCords());
-            System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
-            System.out.println("Z Region Cords: ");
-            System.out.println(files.getRegionZCords());
+           
+            files.getRegionXCords();
+            files.getRegionZCords();
 
             region.setFilePath(initalFilePath);
+            files.getFiles();
+            region.getChunkLocations();
             
-            System.out.println(files.getFiles());
-            System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
-            System.out.println("Chunk Location Bytes");
-            System.out.println("------------------------------------------------------------------\n----------------------------------------------------");
-            System.out.println(region.getChunkLocations());
-            System.out.println("\n\n-------------------------------------\n\n");
-            
-            System.out.println(region.getChunkLocationOffset());
-           // System.out.println(region.getChunkTimeStamps());
+          region.getChunkLocationOffset();
+          region.getChunkTimeStamps();
            
            chunk.setFileNames(initalFilePath);
-           System.out.println(Arrays.toString(chunk.getNBTData()));
-            
+           System.out.println(chunk.getNBTData());
+           
         }
     }
 }
