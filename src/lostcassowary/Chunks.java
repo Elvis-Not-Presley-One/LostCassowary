@@ -17,6 +17,7 @@ import net.querz.nbt.io.NamedTag;
 import net.querz.nbt.tag.ByteTag;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.DoubleTag;
+import net.querz.nbt.tag.ListTag;
 /**
  *
  * @author Lawnguy
@@ -36,6 +37,7 @@ public class Chunks extends Region {
         
        // System.out.println(chunkOffsets.length);
        // System.out.println(filename.length);
+       
         int counter = 0; 
         int fileBeingUsed = 0;
         while (fileBeingUsed != filename.length)
@@ -53,21 +55,26 @@ public class Chunks extends Region {
            {
                for (int z = 0; z < 32; z++)
                {
-                    
+                  
                Chunk chunk = mcaFile.getChunk(x, z);
+               CompoundTag chunkHM = chunk.getHeightMaps();
+                   System.out.println(chunkHM);
+               
                if (chunk == null)
                {
                    System.out.println("chunk is null at" + x + z);
+                   chunk.cleanupPalettesAndBlockStates();
                    continue;
                }
-                   CompoundTag chunkNBT = chunk.getHeightMaps();
-               System.out.println(chunkNBT);
+               
+               for (int y = 0; y < 256; y++)
+               {
+                   
+                   int chunkNBT = chunk.getBiomeAt(x, y, z);
+                   System.out.println(chunkNBT);
+               }
                }
            }
-           
-           //System.out.println(namedTag.getTag().toString());
-           //System.out.println(namedTag.getName());
-          // System.out.println(namedTag.toString());
           
            counter++;
         }
