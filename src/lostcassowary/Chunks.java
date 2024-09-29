@@ -25,7 +25,9 @@ import net.querz.nbt.tag.ListTag;
  */
 public class Chunks extends Region 
 {
-
+    private int signCounter = 0;
+    private int bannerCounter = 0;
+    
     public void setFileNames(String initalFilePath) 
     {
         super.setFilePath(initalFilePath);
@@ -59,10 +61,23 @@ public class Chunks extends Region
                     mcaFile.cleanupPalettesAndBlockStates();
 
                     Chunk chunk = mcaFile.getChunk(x, z);
+                    
+                    if (chunk == null)
+                    {
+                        System.out.println("Chunk data is not there");  
+                        continue;
+                    }
+                    
+                    if (chunk.getHandle() == null)
+                    {
+                        System.out.println("\nChunk data is not there\n");
+                        continue;
+                    }
+               
 
                     CompoundTag handle = chunk.getHandle();
                     //  System.out.println(ahhh.toString());
-                    if (handle == null || chunk == null)
+                    if (handle == null)
                     {
                         System.out.println("Chunk Data is null at"  + x + " -- " + z);
                     }
@@ -101,6 +116,9 @@ public class Chunks extends Region
                                             + blockEnity.getInt("x") + " , " 
                                             + blockEnity.getInt("y") + " , " 
                                             + blockEnity.getInt("z") );
+                                    
+                                    signCounter++;
+                                            
                                     CompoundTag frontText = blockEnity.getCompoundTag("front_text");
                                     CompoundTag backText = blockEnity.getCompoundTag("back_text");
                                     
@@ -118,6 +136,52 @@ public class Chunks extends Region
                                     
                                  
                                 }
+                            }
+                            
+                            for (int i = 0; i < blockEntites.size(); i++)
+                            {
+                              CompoundTag blockEnity = (CompoundTag) blockEntites.get(i);
+                              
+                              String id = blockEnity.getString("id");
+                              
+                              if ("minecraft:banner".equalsIgnoreCase(id))
+                              {
+                                  System.out.println("Banner found at: (X,Y,Z) " 
+                                            + blockEnity.getInt("x") + " , " 
+                                            + blockEnity.getInt("y") + " , " 
+                                            + blockEnity.getInt("z") );
+                                  
+                                  int baseColor = blockEnity.getInt("Base");
+                                  
+                                  System.out.println("Base Color of banner " 
+                                          + baseColor);
+                                  
+                                  ListTag patterns = blockEnity.getListTag("Patterns");
+                                  
+                                  bannerCounter++;
+                                  
+                                  if (patterns != null)
+                                  {
+                                      System.out.println("Banner pattern");
+                                      
+                                      for (int j = 0; j <patterns.size(); j++)
+                                      {
+                                          CompoundTag pattern = (CompoundTag) patterns.get(j);
+                                          int color = pattern.getInt("Color");
+                                          String patternType = pattern.getString("Pattern");
+                                          System.out.println("Pattern: " 
+                                                  + patternType + "Color" + color);
+                                        
+                                      }
+                                      
+                                  }
+                                  else
+                                  {
+                                      System.out.println("No patterns exsit");
+                                  }
+                                  
+                              }
+
                             }
                         }
    
@@ -146,14 +210,17 @@ public class Chunks extends Region
                         //System.out.println(biomes);
                     }
                     */
+                     
                 }
             }
             
             System.out.println("\n===============================================\n");
             fileBeingUsed++;
         }
-
-        //counter++;
+        System.out.println("\n\n\nsignCounter=======" + signCounter 
+                + "\n\n\n=========");
+        System.out.println("\n\n\nsignCounter=======" + bannerCounter 
+                + "\n\n\n=========");
         return fileBeingUsed;
     }
 
