@@ -58,6 +58,7 @@ public class Chunks extends Region
             {
                 for (int z = 0; z < 32; z++) 
                 {
+                    
                     mcaFile.cleanupPalettesAndBlockStates();
 
                     Chunk chunk = mcaFile.getChunk(x, z);
@@ -97,9 +98,10 @@ public class Chunks extends Region
                                     System.out.println("Biomes tag found: at Chunk" + 
                                             " " + x + " " + z + biomes);
                                 }
+                                
                             }
                         }
-                        
+                       
                         ListTag blockEntites = (ListTag) handle.getListTag("block_entities");
                         
                         if (blockEntites != null)
@@ -150,6 +152,17 @@ public class Chunks extends Region
                                             + blockEnity.getInt("x") + " , " 
                                             + blockEnity.getInt("y") + " , " 
                                             + blockEnity.getInt("z") );
+                                  
+                                  if (blockEnity.containsKey("CustomName"))
+                                  {
+                                      String costumeName = blockEnity.getString("CustomName");
+                                      System.out.println("Banner Name" + costumeName);
+                                  }
+                                  else
+                                  {
+                                      System.out.println("Banner has not name");
+                                  }
+                                  
                                   
                                   int baseColor = blockEnity.getInt("Base");
                                   
@@ -202,15 +215,10 @@ public class Chunks extends Region
                     {
                         System.out.println("No entites found in" + x + " -- " + z);
                     }
-                    /*
-                    for (int y = -60; y < 256; y++) 
-                    {
-                        //System.out.println(mcaFile.getBlockStateAt(x, y, z));
-                       // int biomes = mcaFile.getBiomeAt(x, y, z);
-                        //System.out.println(biomes);
-                    }
-                    */
-                     
+                   
+                    
+                    
+                    
                 }
             }
             
