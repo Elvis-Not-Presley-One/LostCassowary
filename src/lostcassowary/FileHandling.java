@@ -1,6 +1,9 @@
 package lostcassowary;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -146,5 +149,29 @@ public class FileHandling
     {
         return zToken;
     }
-
+    
+   /**
+    * The csvWriter() method writes data into csv file format
+    * @param data any String data type
+     * @param pathAndName
+    * @throws IOException 
+    */
+   public void csvWriter(String pathAndName, String... data) throws IOException 
+    {
+    try (Writer fileWriter = new FileWriter("C:\\Users\\Tyler\\OneDrive\\Documents\\NetBeansProjects\\LostCassowary\\src\\lostcassowary\\" + pathAndName, true)) {
+        StringBuilder csvLine = new StringBuilder();
+        
+        for (int i = 0; i < data.length; i++)
+        {
+            csvLine.append(data[i]);
+            if (i < data.length - 1) 
+            {
+                csvLine.append(","); 
+            }
+        }
+        csvLine.append("\n"); 
+        
+        fileWriter.write(csvLine.toString());
+    }
+}
 }

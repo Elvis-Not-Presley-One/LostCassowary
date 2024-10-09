@@ -2,12 +2,15 @@ package lostcassowary;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import net.querz.mca.Chunk;
 import net.querz.mca.MCAFile;
 import net.querz.mca.MCAUtil;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.ListTag;
+import net.querz.nbt.tag.StringTag;
 
 /**
  *
@@ -32,7 +35,6 @@ public class Chunks extends Region
 
         while (fileBeingUsed != filename.length) 
         {
-
             System.out.println((File) filename[fileBeingUsed]);
             System.out.println("\n===============================================\n");
 
@@ -42,7 +44,7 @@ public class Chunks extends Region
             {
                 for (int z = 0; z < 32; z++) 
                 {
-
+                    
                     mcaFile.cleanupPalettesAndBlockStates();
 
                     Chunk chunk = mcaFile.getChunk(x, z);
@@ -78,13 +80,17 @@ public class Chunks extends Region
 
                                 int sectionY = section.getByte("Y");
                                 System.out.println(sectionY);
-                                processBlockStates(section, x, z);
+                                //processBlockStates(section, x, z);
 
                                 if (section.containsKey("biomes")) 
                                 {
+                                    
+                                    processBiomes(section, x, z);
                                     CompoundTag biomes = (CompoundTag) section.getCompoundTag("biomes");
                                     System.out.println("Biomes tag found: at Chunk"
                                             + " " + x + " " + z + biomes);
+                                                                        
+                                    csvWriter("biomes.csv", biomes.toString(), Integer.toString(x), Integer.toString(z));
                                 }
                                 if (section.containsKey("block_states")) 
                                 {
@@ -313,5 +319,59 @@ public class Chunks extends Region
         long blockData = data[longIndex];
         return (int) ((blockData >> bitIndex) & ((1L << bitsPerBlock) - 1)); 
     }
+public void processBiomes(CompoundTag section, int chunkX, int chunkZ) {
+    if (section.containsKey("biomes")) {
+        CompoundTag biomes = section.getCompoundTag("biomes");
+
+        ListTag<StringTag> palette = (ListTag<StringTag>) biomes.getListTag("palette");
+        long[] data = biomes.getLongArray("data");
+
+        if (palette == null || data == null || palette.size() == 0 || data.length == 0) {
+            System.out.println("No biome data found in section.");
+            return;
+        }
+
+        int bitsPerBiome = data.length * 64 / 64; // 64 blocks per section
+        int paletteSize = palette.size();
+
+        if (bitsPerBiome == 0) {
+            System.out.println("Invalid bitsPerBiome for section: " + bitsPerBiome);
+            return;
+        }
+
+        if (paletteSize > (1 << bitsPerBiome)) {
+            bitsPerBiome++;
+        }
+
+        Object[] filename = getFiles().toArray();
+        String regionFileName = ((File) filename[fileBeingUsed]).getName();
+
+        String[] splitName = regionFileName.split("\\.");
+        int regionX = Integer.parseInt(splitName[1]);
+        int regionZ = Integer.parseInt(splitName[2]);
+
+        int baseGlobalX = regionX * 512;
+        int baseGlobalZ = regionZ * 512;
+
+        for (int i = 0; i < 64; i++) {
+            int biomeIndex = getPaletteIndexFromData(data, i, bitsPerBiome);
+
+            if (biomeIndex >= 0 && biomeIndex < palette.size()) {
+                StringTag biome = palette.get(biomeIndex);
+                String biomeName = biome.getValue(); // Get the actual biome name
+
+                int globalX = baseGlobalX + (i % 16);
+                int globalZ = baseGlobalZ + (i / 16);
+
+                System.out.println("Biome: " + biomeName + " at (" + globalX + ", " + globalZ + ")");
+            } else {
+                System.out.println("Biome at index " + biomeIndex + " is out of bounds.");
+            }
+        }
+    } else {
+        System.out.println("No biomes tag found in this section.");
+    }
+}
 
 }
+
