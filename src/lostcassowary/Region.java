@@ -18,14 +18,11 @@ import java.util.List;
  */
 public class Region extends FileHandling 
 {
-
-    private String fileRegionParsedx;
-    private String fileRegionparsedz;
+    private int regionX; 
     private int xCord;
     private int zCord;
-    private int x;
-    private int z;
-    private int regionX;
+    private int globalX = 0;
+    private int globalZ = 0;
     private int regionZ;
     private final List<Byte> chunkByteLocations = new ArrayList<>();
     private final List<Byte> chunkTimeStamps = new ArrayList<>();
@@ -145,59 +142,66 @@ public class Region extends FileHandling
      * directory
      * @throws IOException
      */
-    public List<Instant> getChunkTimeStamps() throws FileNotFoundException,
-            IOException 
+   public List<Instant> getChunkTimeStamps() throws FileNotFoundException, IOException 
+{
+    Object[] filenames = getFiles().toArray();
+
+    for (int i = 0; i < filenames.length; i++) 
     {
-        //locations (1024 entries; 4 bytes each)
-        /*
-        Should put all of this into a csv file with the chunk and region so 
-        it can be used for later on 
-        */
-        
-        Object[] filename = getFiles().toArray();
-        //System.out.println(filename.length);
+        byte[] timestampsBuffer = new byte[1024 * 4];  
 
-        for (int i = 0; i < filename.length; i++) 
+        try (FileInputStream fileInputStream = new FileInputStream((File) filenames[i])) 
         {
-            byte[] a = new byte[1024 * 4];
-
-            try (FileInputStream fileNames = new FileInputStream((File) filename[i])) 
+            fileInputStream.skip(4096); 
+            
+            int cursor = 0;
+            for (int j = 0; j < 1024; j++) 
             {
-                int cursor = 0;
-
-                fileNames.skip(4096);
-
-                for (int j = 0; j < 1024; j++) 
-                {
-                    fileNames.read(a, cursor, 4);
-                    cursor += 4;
-                }
-            }
-            for (int k = 0; k < a.length; k++) 
-            {
-                chunkTimeStamps.add(a[k]);
+                fileInputStream.read(timestampsBuffer, cursor, 4);  
+                cursor += 4;
             }
         }
 
-        for (int i = 0; i < chunkTimeStamps.size(); i += 4) 
+        for (int k = 0; k < timestampsBuffer.length; k++) 
+        {
+            chunkTimeStamps.add(timestampsBuffer[k]);
+        }
+
+        String regionFileName = ((File) filenames[i]).getName();
+        
+        String[] splitName = regionFileName.split("\\.");
+        
+        int regionXX = Integer.parseInt(splitName[1]);
+        int regionZZ = Integer.parseInt(splitName[2]);
+
+        int baseGlobalX = regionXX * 512; 
+        int baseGlobalZ = regionZZ * 512;
+
+        for (int chunkIndex = 0; chunkIndex < chunkTimeStamps.size() / 4; chunkIndex++) 
         {
             byte[] epochsecondsByteArray = new byte[4];
-
             for (int j = 0; j < 4; j++) 
             {
-                epochsecondsByteArray[j] = chunkTimeStamps.get(i + j);
+                epochsecondsByteArray[j] = chunkTimeStamps.get(chunkIndex * 4 + j);
             }
 
-            int epochseconds = ByteBuffer.wrap(epochsecondsByteArray).getInt();
-
+            int epochseconds = ByteBuffer.wrap(epochsecondsByteArray).order(ByteOrder.BIG_ENDIAN).getInt();
             Instant instant = Instant.ofEpochSecond(epochseconds);
-
             instants.add(instant);
 
-            //System.out.println(instant);
+            int chunkXInRegion = chunkIndex % 32;  
+            int chunkZInRegion = chunkIndex / 32;  
+            int globalX = baseGlobalX + (chunkXInRegion * 16); 
+            int globalZ = baseGlobalZ + (chunkZInRegion * 16);  
+
+            System.out.println("Timestamp: " + instant + " - Global X: " + globalX + ", Global Z: " + globalZ);
+
+            csvWriter("TimeStamps.csv", instant.toString(), 
+                    Integer.toString(globalX), Integer.toString(globalZ));
         }
-        return instants;
     }
+    return instants;
+}
 
  
 }
