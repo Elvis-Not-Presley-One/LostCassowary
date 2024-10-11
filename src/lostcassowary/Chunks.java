@@ -158,6 +158,12 @@ public class Chunks extends Region
                                             Integer.toString(ySign), 
                                             Integer.toString(zSign), 
                                             frontMsg.toString(), backMsg.toString());
+                                    
+                                    csvWriter("SignsV2.csv", Integer.toString(xSign), 
+                                            Integer.toString(ySign), 
+                                            Integer.toString(zSign), 
+                                            frontMsg.toString(), backMsg.toString(), 
+                                            frontText.toString(), backText.toString());
                                 }
                             }
 
@@ -209,185 +215,188 @@ public class Chunks extends Region
                                             int color = pattern.getInt("Color");
                                             String patternType = pattern.getString("Pattern");
                                             
+                                            String col = null;
                                             
                                             switch (color)
                                             {
                                                 case 0:
-                                                    System.out.println("Black");
+                                                    col = "Black";
                                                     break;
                                                 case 1: 
-                                                    System.out.println("Red");
+                                                    col = "Red";
                                                     break;
                                                 case 2: 
-                                                    System.out.println("Green");
+                                                    col = "Green";
                                                     break;
                                                 case 3: 
-                                                    System.out.println("Brown");
+                                                    col = "Brown";
                                                     break;
                                                 case 4: 
-                                                    System.out.println("blue");
+                                                    col = "blue";
                                                     break;
                                                 case 5: 
-                                                    System.out.println("Purple");
+                                                    col = "Purple";
                                                     break;
                                                 case 6: 
-                                                    System.out.println("Cyan");
+                                                    col = "Cyan";
                                                     break;
                                                 case 7: 
-                                                    System.out.println("Light Gray");
+                                                    col = "Light Gray";
                                                     break;
                                                 case 8: 
-                                                    System.out.println("Gray");
+                                                    col = "Gray";
                                                     break;
                                                 case 9:
-                                                    System.out.println("Pink");
+                                                    col = "Pink";
                                                     break;
                                                 case 10: 
-                                                    System.out.println("Lime");
+                                                    col = "Lime";
                                                     break;
                                                 case 11: 
-                                                    System.out.println("Yellow");
+                                                    col = "Yellow";
                                                     break;
                                                 case 12: 
-                                                    System.out.println("Light Blue");
+                                                    col = "Light Blue";
                                                     break;
                                                 case 13: 
-                                                    System.out.println("Magenta");
+                                                    col = "Magenta";
                                                     break;
                                                 case 14: 
-                                                    System.out.println("Orange");
+                                                    col = "Orange";
                                                     break;
                                                 case 15: 
-                                                    System.out.println("White");
+                                                    col = "White";
                                                     break;
                                             }
                                             
+                                            String pat = null;
                                             
                                             switch (patternType)
                                             {
                                                 case "b":
-                                                    System.out.println("Fully color Base ");
+                                                    pat = "Fully color Base ";
                                                     break;
                                                 case "bs":
-                                                    System.out.println("Bottom Stripe ");
+                                                    pat = "Bottom Stripe ";
                                                     break;
                                                 case "ts":
-                                                    System.out.println("Top Stripe ");
+                                                    pat = "Top Stripe ";
                                                     break;
                                                 case "ls":
-                                                    System.out.println("Left Stripe ");
+                                                    pat = "Left Stripe ";
                                                     break;
                                                 case "rs":
-                                                    System.out.println("Right Stripe ");
+                                                    pat = "Right Stripe ";
                                                     break;
                                                 case "cs":
-                                                    System.out.println("Center Stripe (Vertical) ");
+                                                    pat = "Center Stripe (Vertical) ";
                                                     break;
                                                 case "ms":
-                                                    System.out.println("Middle Stripe (Horizontal) ");
+                                                    pat = "Middle Stripe (Horizontal) ";
                                                     break;
                                                 case "drs":
-                                                    System.out.println("Down Right Stripe ");
+                                                    pat = "Down Right Stripe ";
                                                     break;
                                                 case "dls":
-                                                    System.out.println("Down Left Stripe ");
+                                                    pat = "Down Left Stripe ";
                                                     break;
                                                 case "ss":
-                                                    System.out.println("Small (Vertical) Stripes ");
+                                                    pat = "Small (Vertical) Stripes ";
                                                     break;
                                                 case "cr":
-                                                    System.out.println("Diagonal Cross ");
+                                                    pat = "Diagonal Cross ";
                                                     break;
                                                 case "sc":
-                                                    System.out.println("Square Cross ");
+                                                    pat = "Square Cross ";
                                                     break;
                                                 case "ld":
-                                                    System.out.println("Left of Diagonal ");
+                                                    pat = "Left of Diagonal ";
                                                     break;
                                                 case "rud":
-                                                    System.out.println("Right of upside-down Diagonal ");
+                                                    pat = "Right of upside-down Diagonal ";
                                                     break;
                                                 case "lud":
-                                                    System.out.println("Left of upside-down Diagonal ");
+                                                    pat = "Left of upside-down Diagonal ";
                                                     break;
                                                 case "rd":
-                                                    System.out.println("Right of Diagonal ");
+                                                    pat = "Right of Diagonal ";
                                                     break;
                                                 case "vh":
-                                                    System.out.println("Vertical Half (left) ");
+                                                    pat = "Vertical Half (left) ";
                                                     break;
                                                 case "vhr":
-                                                    System.out.println("Vertical Half (right) ");
+                                                    pat = "Vertical Half (right) ";
                                                     break;
                                                 case "hh":
-                                                    System.out.println("Horizontal Half (top) ");
+                                                    pat = "Horizontal Half (top) ";
                                                     break;
                                                 case "hhb":
-                                                    System.out.println("Horizontal Half (bottom) ");
+                                                    pat = "Horizontal Half (bottom) ";
                                                     break;
                                                 case "bl":
-                                                    System.out.println("Bottom Left Corner ");
+                                                    pat = "Bottom Left Corner ";
                                                     break;
                                                 case "br":
-                                                    System.out.println("Bottom Right Corner ");
+                                                    pat = "Bottom Right Corner ";
                                                     break;
                                                 case "tl":
-                                                    System.out.println("Top Left Corner ");
+                                                    pat = "Top Left Corner ";
                                                     break;
                                                 case "tr":
-                                                    System.out.println("Top Right Corner ");
+                                                    pat = "Top Right Corner ";
                                                     break;
                                                 case "bt":
-                                                    System.out.println("Bottom Triangle ");
+                                                    pat = "Bottom Triangle ";
                                                     break;
                                                 case "tt":
-                                                    System.out.println("Top Triangle ");
+                                                    pat = "Top Triangle ";
                                                     break;
                                                 case "bts":
-                                                    System.out.println("Bottom Triangle Sawtooth ");
+                                                    pat = "Bottom Triangle Sawtooth ";
                                                     break;
                                                 case "tts":
-                                                    System.out.println("Top Triangle Sawtooth ");
+                                                    pat = "Top Triangle Sawtooth ";
                                                     break;
                                                 case "mc":
-                                                    System.out.println("Middle Circle ");
+                                                    pat = "Middle Circle ";
                                                     break;
                                                 case "mr":
-                                                    System.out.println("Middle Rhombus ");
+                                                    pat = "Middle Rhombus ";
                                                     break;
                                                 case "bo":
-                                                    System.out.println("Border ");
+                                                    pat = "Border ";
                                                     break;
                                                 case "cbo":
-                                                    System.out.println("Curly Border ");
+                                                    pat = "Curly Border ";
                                                     break;
                                                 case "bir":
-                                                    System.out.println("Brick ");
+                                                    pat = "Brick ";
                                                     break;
                                                 case "gra":
-                                                    System.out.println("Gradient");
+                                                    pat = "Gradient";
                                                     break;
                                                 case "gru":
-                                                    System.out.println("Gradient upside-down ");
+                                                    pat = "Gradient upside-down ";
                                                     break;
                                                 case "cre":
-                                                    System.out.println("Creeper ");
+                                                    pat = "Creeper ";
                                                     break;
                                                 case "sku":
-                                                    System.out.println("Skull");
+                                                    pat = "Skull";
                                                     break;
                                                 case "flo":
-                                                    System.out.println("Flower");
+                                                    pat = "Flower";
                                                     break;
                                                 case "moj":
-                                                    System.out.println("Mojang");
+                                                    pat = "Mojang";
                                                     break;
                                                 case "blb":
-                                                    System.out.println("Globe");
+                                                    pat = "Globe";
                                                     break;
                                                 case "pig":
-                                                    System.out.println("Piglin");
+                                                    pat = "Piglin";
                                                     break;
+                                                
                                             }
                                             
                                             System.out.println("Pattern: "
@@ -397,7 +406,7 @@ public class Chunks extends Region
                                                     Integer.toString(bannerY), 
                                                     Integer.toString(bannerZ),
                                                     costumeName,
-                                                    Integer.toString(color), patternType);
+                                                    col, pat);
                                         }
                                         
                                     } 
