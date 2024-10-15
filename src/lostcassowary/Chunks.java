@@ -100,8 +100,8 @@ public class Chunks extends Region
                                     
                                     processBiomes(section, x, z);
                                     CompoundTag biomes = (CompoundTag) section.getCompoundTag("biomes");
-                                    System.out.println("Biomes tag found: at Chunk"
-                                            + " " + x + " " + z + biomes);
+                                  // System.out.println("Biomes tag found: at Chunk"
+                                  //          + " " + x + " " + z + biomes);
                                                                         
                                     //csvWriter("biomes.csv", biomes.toString(), Integer.toString(x), Integer.toString(z));
                                 }
@@ -110,7 +110,7 @@ public class Chunks extends Region
 
                                     CompoundTag block = (CompoundTag) section.getCompoundTag("block_states");
 
-                                    System.out.println("Blocks: " + block);
+                                    //System.out.println("Blocks: " + block);
 
                                 }
 
@@ -517,8 +517,8 @@ public class Chunks extends Region
                             int globalX = baseGlobalX + (chunkX * 16) + x;
                             int globalZ = baseGlobalZ + (chunkZ * 16) + z;
 
-                            System.out.println("Block: " + blockName + " at ("
-                                    + globalX + ", " + globalY + ", " + globalZ + ")");
+                         //  System.out.println("Block: " + blockName + " at ("
+                           //         + globalX + ", " + globalY + ", " + globalZ + ")");
                             csvWriter("Blocks.csv", blockName, 
                                     Integer.toString(globalX), 
                                     Integer.toString(globalY), 
@@ -571,14 +571,48 @@ public class Chunks extends Region
  * @param chunkZ where in the chunk of z 
  * @throws IOException 
  */
-    public void processBiomes(CompoundTag section, int chunkX, int chunkZ) throws IOException 
-    {
+public void processBiomes(CompoundTag section, int chunkX, int chunkZ) throws IOException 
+{
     if (section.containsKey("biomes")) 
     {
         CompoundTag biomes = section.getCompoundTag("biomes");
 
+        // Debug: Check if the biome data exists
+        //System.out.println("Biomes tag found at Chunk " + chunkX + " " + chunkZ + ": " + biomes);
+
         ListTag<StringTag> palette = (ListTag<StringTag>) biomes.getListTag("palette");
         long[] data = biomes.getLongArray("data");
+
+        // Check if palette is present but no data (entire chunk may be one biome)
+        if (palette != null && palette.size() > 0 && (data == null || data.length == 0)) 
+        {
+            // Assume the entire section is covered by the first biome in the palette
+            StringTag biome = palette.get(0);
+            String biomeName = biome.getValue();
+          //  System.out.println("Entire chunk (" + chunkX + ", " + chunkZ + ") is biome: " + biomeName);
+
+            Object[] filename = getFiles().toArray();
+            String regionFileName = ((File) filename[fileBeingUsed]).getName();
+
+            String[] splitName = regionFileName.split("\\.");
+            int regionX = Integer.parseInt(splitName[1]);
+            int regionZ = Integer.parseInt(splitName[2]);
+
+            int baseGlobalX = regionX * 512;
+            int baseGlobalZ = regionZ * 512;
+
+            // Log all coordinates for the entire chunk being the same biome
+            for (int i = 0; i < 64; i++) 
+            {
+                int globalX = baseGlobalX + (i % 16);
+                int globalZ = baseGlobalZ + (i / 16);
+                
+                // Log to CSV
+                csvWriter("Biomes.csv", biomeName, Integer.toString(globalX), Integer.toString(globalZ));
+              //  System.out.println("Biome: " + biomeName + " at (" + globalX + ", " + globalZ + ")");
+            }
+            return;
+        }
 
         if (palette == null || data == null || palette.size() == 0 || data.length == 0) 
         {
@@ -588,6 +622,9 @@ public class Chunks extends Region
 
         int bitsPerBiome = data.length * 64 / 64; // 64 blocks per section
         int paletteSize = palette.size();
+
+        // Debug: Output palette size and bits per biome
+       // System.out.println("Palette size: " + paletteSize + ", bitsPerBiome: " + bitsPerBiome);
 
         if (bitsPerBiome == 0) 
         {
@@ -614,22 +651,29 @@ public class Chunks extends Region
         {
             int biomeIndex = getPaletteIndexFromData(data, i, bitsPerBiome);
 
+            // Debug: Print out the biome index
+           // System.out.println("Biome Index at i=" + i + ": " + biomeIndex);
+
             if (biomeIndex >= 0 && biomeIndex < palette.size()) 
             {
                 StringTag biome = palette.get(biomeIndex);
-                String biomeName = biome.getValue(); 
-                
+                String biomeName = biome.getValue();
+
+                // Print out biome name to check for End-specific biomes
+              //  System.out.println("Biome name: " + biomeName);
+
                 int globalX = baseGlobalX + (i % 16);
                 int globalZ = baseGlobalZ + (i / 16);
 
-                System.out.println("Biome: " + biomeName + " at (" + globalX + 
-                        ", " + globalZ + ")");
+               // System.out.println("Biome: " + biomeName + " at (" + globalX + 
+               //        ", " + globalZ + ")");
+
                 csvWriter("Biomes.csv", biomeName, Integer.toString(globalX), 
                         Integer.toString(globalZ));
             } 
             else
             {
-                System.out.println("Biome at index " + biomeIndex + " is out of bounds.");
+              //  System.out.println("Biome at index " + biomeIndex + " is out of bounds.");
             }
         }
     } 

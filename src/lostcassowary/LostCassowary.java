@@ -91,10 +91,21 @@ public class LostCassowary {
             region.getChunkLocations();
             
           region.getChunkLocationOffset();
-          region.getChunkTimeStamps();
+        //  region.getChunkTimeStamps();
            
            chunk.setFileNames(initalFilePath);
            System.out.println(chunk.getNBTData());
+           
+           
+           
+           
+           //r.-1.-27.mca
+           
+           
+           
+           
+           
+           
            
         }
     }

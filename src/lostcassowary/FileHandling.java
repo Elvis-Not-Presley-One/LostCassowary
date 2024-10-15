@@ -1,5 +1,6 @@
 package lostcassowary;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -156,9 +157,10 @@ public class FileHandling
      * @param pathAndName
     * @throws IOException 
     */
-   public void csvWriter(String pathAndName, String... data) throws IOException 
+public void csvWriter(String pathAndName, String... data) throws IOException 
+{
+    try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter("C:\\MinecraftInfo\\Files" + pathAndName, true))) 
     {
-    try (Writer fileWriter = new FileWriter("C:\\Users\\Tyler\\OneDrive\\Documents\\NetBeansProjects\\LostCassowary\\src\\lostcassowary\\" + pathAndName, true)) {
         StringBuilder csvLine = new StringBuilder();
         
         for (int i = 0; i < data.length; i++)
@@ -166,12 +168,17 @@ public class FileHandling
             csvLine.append(data[i]);
             if (i < data.length - 1) 
             {
-                csvLine.append(","); 
+                csvLine.append(",");  // Add comma between values
             }
         }
-        csvLine.append("\n"); 
+        // Use Windows-style line break
+        csvLine.append("\r\n");  // Add a new line after the row for Excel compatibility
         
         fileWriter.write(csvLine.toString());
+        fileWriter.flush();  // Ensure data is written immediately
     }
 }
+
+
+
 }
