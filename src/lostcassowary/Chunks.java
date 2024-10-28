@@ -93,7 +93,7 @@ public class Chunks extends Region
 
                                 int sectionY = section.getByte("Y");
                                 System.out.println(sectionY);
-                                processBlockStates(section, x, z);
+                                //processBlockStates(section, x, z);
 
                                 if (section.containsKey("biomes")) 
                                 {
@@ -589,7 +589,7 @@ public void processBiomes(CompoundTag section, int chunkX, int chunkZ) throws IO
             // Assume the entire section is covered by the first biome in the palette
             StringTag biome = palette.get(0);
             String biomeName = biome.getValue();
-          //  System.out.println("Entire chunk (" + chunkX + ", " + chunkZ + ") is biome: " + biomeName);
+            System.out.println("Entire chunk (" + chunkX + ", " + chunkZ + ") is biome: " + biomeName);
 
             Object[] filename = getFiles().toArray();
             String regionFileName = ((File) filename[fileBeingUsed]).getName();
