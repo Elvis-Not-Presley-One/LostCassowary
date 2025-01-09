@@ -84,7 +84,9 @@ public class Chunks extends Region
 
                     if (handle != null) 
                     {
+                        /*
                         ListTag sections = (ListTag) handle.getListTag("sections");
+                        
                         if (sections != null) 
                         {
                             for (int i = 0; i < sections.size(); i++) 
@@ -117,8 +119,9 @@ public class Chunks extends Region
                                 }
 
                             }
+                            
                         }
-
+                            */
                         ListTag blockEntites = (ListTag) handle.getListTag("block_entities");
 
                         if (blockEntites != null) 
@@ -156,12 +159,12 @@ public class Chunks extends Region
 
                                     System.out.println(backMsg.asStringTagList());
 
-                                    csvWriter("Signs.csv", Integer.toString(xSign), 
+                                    csvWriter("lampSigns.csv", Integer.toString(xSign), 
                                             Integer.toString(ySign), 
                                             Integer.toString(zSign), 
                                             frontMsg.toString(), backMsg.toString());
                                     
-                                    csvWriter("SignsV2.csv", Integer.toString(xSign), 
+                                    csvWriter("lampSignsV2.csv", Integer.toString(xSign), 
                                             Integer.toString(ySign), 
                                             Integer.toString(zSign), 
                                             frontMsg.toString(), backMsg.toString(), 
@@ -209,19 +212,17 @@ public class Chunks extends Region
                                     {
                                         
                                     String costumeName = blockEnity.getString("CustomName");
+                                    
                                     List<String> bannerColor = new ArrayList<>();
                                     List<String> bannerPat = new ArrayList<>();
 
-                                    
-                                    System.out.println("Banner pattern");
+                              
+                                        for (int j = 0; j < patterns.size(); j++) 
+                                        {
+                                            System.out.println("Banner pattern");
                                     CompoundTag pattern = (CompoundTag) patterns.get(j);
                                     int color = pattern.getInt("Color");
                                     String patternType = pattern.getString("Pattern");
-
-                                    
-                                        for (int j = 0; j < patterns.size(); j++) 
-                                        {
-                                            
                                             
                                             String col = null;
                                             
@@ -277,7 +278,6 @@ public class Chunks extends Region
                                                     break;
                                             }
                                             
-                                            bannerColor.add(col);
                                             
                                             String pat = null;
                                             
@@ -408,14 +408,15 @@ public class Chunks extends Region
                                                     break;
                                                 
                                             }
-                                            bannerPat.add(pat);
+                                            bannerPat.add("("+ col);
+                                            bannerPat.add(pat + ")");
                                             
                                             System.out.println("Pattern: "
                                                     + bannerPat + "Color" + bannerColor);
                                             
                                         }
                                         
-                                        csvWriter("Banners.csv", Integer.toString(bannerX), 
+                                        csvWriter("lampBanners.csv", Integer.toString(bannerX), 
                                                     Integer.toString(bannerY), 
                                                     Integer.toString(bannerZ),
                                                     costumeName,
@@ -535,6 +536,7 @@ public class Chunks extends Region
                                     Integer.toString(globalX), 
                                     Integer.toString(globalY), 
                                     Integer.toString(globalZ));
+                           
                         }
                     }
                 }
