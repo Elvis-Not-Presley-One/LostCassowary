@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 import net.querz.mca.Chunk;
 import net.querz.mca.MCAFile;
 import net.querz.mca.MCAUtil;
@@ -205,15 +207,21 @@ public class Chunks extends Region
 
                                     if (patterns != null) 
                                     {
+                                        
                                     String costumeName = blockEnity.getString("CustomName");
+                                    List<String> bannerColor = new ArrayList<>();
+                                    List<String> bannerPat = new ArrayList<>();
 
-                                        System.out.println("Banner pattern");
+                                    
+                                    System.out.println("Banner pattern");
+                                    CompoundTag pattern = (CompoundTag) patterns.get(j);
+                                    int color = pattern.getInt("Color");
+                                    String patternType = pattern.getString("Pattern");
 
+                                    
                                         for (int j = 0; j < patterns.size(); j++) 
                                         {
-                                            CompoundTag pattern = (CompoundTag) patterns.get(j);
-                                            int color = pattern.getInt("Color");
-                                            String patternType = pattern.getString("Pattern");
+                                            
                                             
                                             String col = null;
                                             
@@ -268,6 +276,8 @@ public class Chunks extends Region
                                                     col = "White";
                                                     break;
                                             }
+                                            
+                                            bannerColor.add(col);
                                             
                                             String pat = null;
                                             
@@ -398,16 +408,18 @@ public class Chunks extends Region
                                                     break;
                                                 
                                             }
+                                            bannerPat.add(pat);
                                             
                                             System.out.println("Pattern: "
-                                                    + patternType + "Color" + color);
+                                                    + bannerPat + "Color" + bannerColor);
                                             
-                                            csvWriter("Banners.csv", Integer.toString(bannerX), 
+                                        }
+                                        
+                                        csvWriter("Banners.csv", Integer.toString(bannerX), 
                                                     Integer.toString(bannerY), 
                                                     Integer.toString(bannerZ),
                                                     costumeName,
-                                                    col, pat);
-                                        }
+                                                    bannerColor.toString(), bannerPat.toString());
                                         
                                     } 
                                     else 
@@ -541,7 +553,7 @@ public class Chunks extends Region
  * @param data Long array of the blocks nbt data 
  * @param index the y index of the section 
  * @param bitsPerBlock amount of bits allowed for the buffer 
- * @return who really knows, idk palette stuff 
+ * @return who really knows, idk palette shit 
  */
     private int getPaletteIndexFromData(long[] data, int index, int bitsPerBlock) 
     {
