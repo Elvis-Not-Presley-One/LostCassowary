@@ -8,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -21,8 +20,6 @@ public class Region extends FileHandling
     private int regionX; 
     private int xCord;
     private int zCord;
-    private int globalX = 0;
-    private int globalZ = 0;
     private int regionZ;
     private final List<Byte> chunkByteLocations = new ArrayList<>();
     private final List<Byte> chunkTimeStamps = new ArrayList<>();

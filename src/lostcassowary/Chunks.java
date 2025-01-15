@@ -2,9 +2,7 @@ package lostcassowary;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import net.querz.mca.Chunk;
@@ -159,12 +157,12 @@ public class Chunks extends Region
 
                                     System.out.println(backMsg.asStringTagList());
 
-                                    csvWriter("lampSigns.csv", Integer.toString(xSign), 
+                                    csvWriter("Signs.csv", Integer.toString(xSign), 
                                             Integer.toString(ySign), 
                                             Integer.toString(zSign), 
                                             frontMsg.toString(), backMsg.toString());
                                     
-                                    csvWriter("lampSignsV2.csv", Integer.toString(xSign), 
+                                    csvWriter("SignsV2.csv", Integer.toString(xSign), 
                                             Integer.toString(ySign), 
                                             Integer.toString(zSign), 
                                             frontMsg.toString(), backMsg.toString(), 
@@ -416,7 +414,7 @@ public class Chunks extends Region
                                             
                                         }
                                         
-                                        csvWriter("lampBanners.csv", Integer.toString(bannerX), 
+                                        csvWriter("Banners.csv", Integer.toString(bannerX), 
                                                     Integer.toString(bannerY), 
                                                     Integer.toString(bannerZ),
                                                     costumeName,
@@ -591,7 +589,7 @@ public void processBiomes(CompoundTag section, int chunkX, int chunkZ) throws IO
     {
         CompoundTag biomes = section.getCompoundTag("biomes");
 
-        // Debug: Check if the biome data exists
+        // Debug
         //System.out.println("Biomes tag found at Chunk " + chunkX + " " + chunkZ + ": " + biomes);
 
         ListTag<StringTag> palette = (ListTag<StringTag>) biomes.getListTag("palette");
@@ -615,13 +613,13 @@ public void processBiomes(CompoundTag section, int chunkX, int chunkZ) throws IO
             int baseGlobalX = regionX * 512;
             int baseGlobalZ = regionZ * 512;
 
-            // Log all coordinates for the entire chunk being the same biome
+            // log all coordinates for the entire chunk being the same biome
             for (int i = 0; i < 64; i++) 
             {
                 int globalX = baseGlobalX + (i % 16);
                 int globalZ = baseGlobalZ + (i / 16);
                 
-                // Log to CSV
+                // log to CSV
                 csvWriter("Biomes.csv", biomeName, Integer.toString(globalX), Integer.toString(globalZ));
               //  System.out.println("Biome: " + biomeName + " at (" + globalX + ", " + globalZ + ")");
             }
@@ -637,7 +635,7 @@ public void processBiomes(CompoundTag section, int chunkX, int chunkZ) throws IO
         int bitsPerBiome = data.length * 64 / 64; // 64 blocks per section
         int paletteSize = palette.size();
 
-        // Debug: Output palette size and bits per biome
+        // debug
        // System.out.println("Palette size: " + paletteSize + ", bitsPerBiome: " + bitsPerBiome);
 
         if (bitsPerBiome == 0) 
@@ -665,7 +663,7 @@ public void processBiomes(CompoundTag section, int chunkX, int chunkZ) throws IO
         {
             int biomeIndex = getPaletteIndexFromData(data, i, bitsPerBiome);
 
-            // Debug: Print out the biome index
+            // debug
            // System.out.println("Biome Index at i=" + i + ": " + biomeIndex);
 
             if (biomeIndex >= 0 && biomeIndex < palette.size()) 

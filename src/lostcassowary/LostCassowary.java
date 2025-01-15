@@ -9,7 +9,8 @@ import java.util.List;
  *
  * @author Lawnguy
  */
-public class LostCassowary {
+public class LostCassowary 
+{
 
     /**
      * @param args the command line arguments
@@ -91,6 +92,8 @@ public class LostCassowary {
             region.getChunkLocations();
             
           region.getChunkLocationOffset();
+          
+          //Use to get the time stamps 
         //  region.getChunkTimeStamps();
            
            chunk.setFileNames(initalFilePath);
