@@ -1,4 +1,8 @@
 # LostCassowary
+![GitHub Repo stars](https://img.shields.io/github/stars/Elvis-Not-Presley-One/LostCassowary?style=for-the-badge&logo=Github&labelColor=black)
+![GitHub commits since latest release](https://img.shields.io/github/commits-since/Elvis-Not-Presley-One/LostCassowary/latest?style=for-the-badge&logo=Github&labelColor=black&color=pink)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Elvis-Not-Presley-One/LostCassowary/total?style=for-the-badge&logo=Github&labelColor=black&color=cyan)
+
 LostCassowary is a Minecraft data miner specializing in getting banner and sign data from Minecraft Region files from World Downloads (wdl's); the program can also get biome, block, and chunk timestamp data.
 LostCassowary was made over the course of 8 months specifically for Maxdog006's 25k End wdl; with the goal of getting the nbt sign and banner data from a big wdl (over 10,000 region files).
 
