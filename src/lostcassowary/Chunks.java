@@ -10,6 +10,8 @@ import net.querz.mca.MCAFile;
 import net.querz.mca.MCAUtil;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.ListTag;
+import net.querz.nbt.tag.LongTag;
+import net.querz.nbt.tag.ShortTag;
 import net.querz.nbt.tag.StringTag;
 
 /**
@@ -169,7 +171,122 @@ public class Chunks extends Region
                                             frontText.toString(), backText.toString());
                                 }
                             }
-
+                            
+                            
+                            
+                            for (int j = 0; j < blockEntites.size(); j++)
+                            {   
+                                //Note id can be anything enderchest ect 
+                                //we could make each sign or banner a helper function 
+                                //then call it if the id matches could help readabilty
+                                CompoundTag blockEnity = (CompoundTag) blockEntites.get(j);
+                                
+                                String id = blockEnity.getString("id");
+                                
+                                if ("minecraft:shulker_box".equalsIgnoreCase(id))
+                                {
+                                    int shulkerX = blockEnity.getInt("x");
+                                    int shulkerY = blockEnity.getInt("y");
+                                    int shulkerZ = blockEnity.getInt("z");
+                                    
+                                    System.out.printf("Shulker found at %d %d %d ", shulkerX, shulkerY, shulkerZ);
+                                    
+                                    String customName = "None";
+                                    
+                                    if (blockEnity.containsKey("CustomName"))
+                                    {
+                                    customName = blockEnity.getString("CustomName");
+                                    System.out.printf("\nShulker Name %s", customName);
+                                    }
+                                   
+ 
+                                    csvWriter("Shulkers.csv", Integer.toString(shulkerX),
+                                            Integer.toString(shulkerY),
+                                            Integer.toString(shulkerZ),
+                                            customName, id);
+                                 
+                                }
+                            }
+                            
+                            for (int g = 0; g < blockEntites.size(); g++)
+                            {
+                               CompoundTag blockEnity = (CompoundTag) blockEntites.get(g);
+                                
+                                String id = blockEnity.getString("id"); 
+                                
+                                if ("minecraft:mob_spawner".equalsIgnoreCase(id))
+                                {
+                                    int spawnerX = blockEnity.getInt("x");
+                                    int spawnerY = blockEnity.getInt("y");
+                                    int spawnerZ = blockEnity.getInt("z");
+                                    
+                                    System.out.printf("Spawner Found at: %d %d %d",spawnerX, spawnerY, spawnerZ);
+                                    
+                                ShortTag spawnerDelay = blockEnity.getShortTag("Delay");
+                                    int spawnerDelayNumberInt = (int) spawnerDelay.asInt();
+                                    System.out.println(" Short: "+ spawnerDelayNumberInt);
+                                    
+                                    csvWriter("Spawners.csv", Integer.toString(spawnerX),
+                                            Integer.toString(spawnerY),
+                                            Integer.toString(spawnerZ),
+                                            Integer.toString(spawnerDelayNumberInt));
+                                }
+                            }
+                            
+                            for (int f = 0; f < blockEntites.size(); f++)
+                            {
+                                CompoundTag blockEnity = (CompoundTag) blockEntites.get(f);
+                                
+                                String id = blockEnity.getString("id"); 
+                                
+                                if ("minecraft:end_gateway".equalsIgnoreCase(id))
+                                {
+                                    int gateInX = blockEnity.getInt("x");
+                                    int gateInY = blockEnity.getInt("y");
+                                    int gateInZ = blockEnity.getInt("z");
+                                              
+                                   
+                                   LongTag gatewayAge = blockEnity.getLongTag("Age");
+                                   
+                                   int gatewayAgeInt;
+                                   if (gatewayAge != null)
+                                   {
+                                    gatewayAgeInt = gatewayAge.asInt();
+                                   }
+                                   else
+                                   {
+                                       gatewayAgeInt = 0;
+                                   }
+                                  
+                                   CompoundTag exitPortal = blockEnity.getCompoundTag("ExitPortal");
+                                   
+                                   int gateOutX;
+                                   int gateOutY;
+                                   int gateOutZ;
+                                   if (exitPortal != null)
+                                   {
+                                       gateOutX = exitPortal.getInt("x");
+                                       gateOutY = exitPortal.getInt("y");
+                                       gateOutZ = exitPortal.getInt("z");
+                                   }
+                                   else
+                                   {
+                                      gateOutX = 0;
+                                      gateOutY = 0;
+                                      gateOutZ = 0;
+                    
+                                   }
+                                   
+                                
+                                    System.out.printf("End Gateway Found at: %d %d %d, Age: %d, Exit: %d, %d, %d", 
+                                            gateInX, gateInY, gateInZ, gatewayAgeInt, gateOutX, gateOutY, gateOutZ);
+                                   
+                                    csvWriter("End Gateay.csv", Integer.toString(gateInX), Integer.toString(gateInY), 
+                                            Integer.toString(gateInZ), Integer.toString(gatewayAgeInt),
+                                            Integer.toString(gateOutX),Integer.toString(gateOutY), Integer.toString(gateOutZ));
+                                }
+                            }
+                            
                             for (int i = 0; i < blockEntites.size(); i++) 
                             {
                                 CompoundTag blockEnity = (CompoundTag) blockEntites.get(i);
@@ -226,54 +343,22 @@ public class Chunks extends Region
                                             
                                             switch (color)
                                             {
-                                                case 0:
-                                                    col = "Black";
-                                                    break;
-                                                case 1: 
-                                                    col = "Red";
-                                                    break;
-                                                case 2: 
-                                                    col = "Green";
-                                                    break;
-                                                case 3: 
-                                                    col = "Brown";
-                                                    break;
-                                                case 4: 
-                                                    col = "blue";
-                                                    break;
-                                                case 5: 
-                                                    col = "Purple";
-                                                    break;
-                                                case 6: 
-                                                    col = "Cyan";
-                                                    break;
-                                                case 7: 
-                                                    col = "Light Gray";
-                                                    break;
-                                                case 8: 
-                                                    col = "Gray";
-                                                    break;
-                                                case 9:
-                                                    col = "Pink";
-                                                    break;
-                                                case 10: 
-                                                    col = "Lime";
-                                                    break;
-                                                case 11: 
-                                                    col = "Yellow";
-                                                    break;
-                                                case 12: 
-                                                    col = "Light Blue";
-                                                    break;
-                                                case 13: 
-                                                    col = "Magenta";
-                                                    break;
-                                                case 14: 
-                                                    col = "Orange";
-                                                    break;
-                                                case 15: 
-                                                    col = "White";
-                                                    break;
+                                                case 0 -> col = "Black";
+                                                case 1 -> col = "Red";
+                                                case 2 -> col = "Green";
+                                                case 3 -> col = "Brown";
+                                                case 4 -> col = "blue";
+                                                case 5 -> col = "Purple";
+                                                case 6 -> col = "Cyan";
+                                                case 7 -> col = "Light Gray";
+                                                case 8 -> col = "Gray";
+                                                case 9 -> col = "Pink";
+                                                case 10 -> col = "Lime";
+                                                case 11 -> col = "Yellow";
+                                                case 12 -> col = "Light Blue";
+                                                case 13 -> col = "Magenta";
+                                                case 14 -> col = "Orange";
+                                                case 15 -> col = "White";
                                             }
                                             
                                             
@@ -281,129 +366,47 @@ public class Chunks extends Region
                                             
                                             switch (patternType)
                                             {
-                                                case "b":
-                                                    pat = "Fully color Base ";
-                                                    break;
-                                                case "bs":
-                                                    pat = "Bottom Stripe ";
-                                                    break;
-                                                case "ts":
-                                                    pat = "Top Stripe ";
-                                                    break;
-                                                case "ls":
-                                                    pat = "Left Stripe ";
-                                                    break;
-                                                case "rs":
-                                                    pat = "Right Stripe ";
-                                                    break;
-                                                case "cs":
-                                                    pat = "Center Stripe (Vertical) ";
-                                                    break;
-                                                case "ms":
-                                                    pat = "Middle Stripe (Horizontal) ";
-                                                    break;
-                                                case "drs":
-                                                    pat = "Down Right Stripe ";
-                                                    break;
-                                                case "dls":
-                                                    pat = "Down Left Stripe ";
-                                                    break;
-                                                case "ss":
-                                                    pat = "Small (Vertical) Stripes ";
-                                                    break;
-                                                case "cr":
-                                                    pat = "Diagonal Cross ";
-                                                    break;
-                                                case "sc":
-                                                    pat = "Square Cross ";
-                                                    break;
-                                                case "ld":
-                                                    pat = "Left of Diagonal ";
-                                                    break;
-                                                case "rud":
-                                                    pat = "Right of upside-down Diagonal ";
-                                                    break;
-                                                case "lud":
-                                                    pat = "Left of upside-down Diagonal ";
-                                                    break;
-                                                case "rd":
-                                                    pat = "Right of Diagonal ";
-                                                    break;
-                                                case "vh":
-                                                    pat = "Vertical Half (left) ";
-                                                    break;
-                                                case "vhr":
-                                                    pat = "Vertical Half (right) ";
-                                                    break;
-                                                case "hh":
-                                                    pat = "Horizontal Half (top) ";
-                                                    break;
-                                                case "hhb":
-                                                    pat = "Horizontal Half (bottom) ";
-                                                    break;
-                                                case "bl":
-                                                    pat = "Bottom Left Corner ";
-                                                    break;
-                                                case "br":
-                                                    pat = "Bottom Right Corner ";
-                                                    break;
-                                                case "tl":
-                                                    pat = "Top Left Corner ";
-                                                    break;
-                                                case "tr":
-                                                    pat = "Top Right Corner ";
-                                                    break;
-                                                case "bt":
-                                                    pat = "Bottom Triangle ";
-                                                    break;
-                                                case "tt":
-                                                    pat = "Top Triangle ";
-                                                    break;
-                                                case "bts":
-                                                    pat = "Bottom Triangle Sawtooth ";
-                                                    break;
-                                                case "tts":
-                                                    pat = "Top Triangle Sawtooth ";
-                                                    break;
-                                                case "mc":
-                                                    pat = "Middle Circle ";
-                                                    break;
-                                                case "mr":
-                                                    pat = "Middle Rhombus ";
-                                                    break;
-                                                case "bo":
-                                                    pat = "Border ";
-                                                    break;
-                                                case "cbo":
-                                                    pat = "Curly Border ";
-                                                    break;
-                                                case "bir":
-                                                    pat = "Brick ";
-                                                    break;
-                                                case "gra":
-                                                    pat = "Gradient";
-                                                    break;
-                                                case "gru":
-                                                    pat = "Gradient upside-down ";
-                                                    break;
-                                                case "cre":
-                                                    pat = "Creeper ";
-                                                    break;
-                                                case "sku":
-                                                    pat = "Skull";
-                                                    break;
-                                                case "flo":
-                                                    pat = "Flower";
-                                                    break;
-                                                case "moj":
-                                                    pat = "Mojang";
-                                                    break;
-                                                case "blb":
-                                                    pat = "Globe";
-                                                    break;
-                                                case "pig":
-                                                    pat = "Piglin";
-                                                    break;
+                                                case "b" -> pat = "Fully color Base ";
+                                                case "bs" -> pat = "Bottom Stripe ";
+                                                case "ts" -> pat = "Top Stripe ";
+                                                case "ls" -> pat = "Left Stripe ";
+                                                case "rs" -> pat = "Right Stripe ";
+                                                case "cs" -> pat = "Center Stripe (Vertical) ";
+                                                case "ms" -> pat = "Middle Stripe (Horizontal) ";
+                                                case "drs" -> pat = "Down Right Stripe ";
+                                                case "dls" -> pat = "Down Left Stripe ";
+                                                case "ss" -> pat = "Small (Vertical) Stripes ";
+                                                case "cr" -> pat = "Diagonal Cross ";
+                                                case "sc" -> pat = "Square Cross ";
+                                                case "ld" -> pat = "Left of Diagonal ";
+                                                case "rud" -> pat = "Right of upside-down Diagonal ";
+                                                case "lud" -> pat = "Left of upside-down Diagonal ";
+                                                case "rd" -> pat = "Right of Diagonal ";
+                                                case "vh" -> pat = "Vertical Half (left) ";
+                                                case "vhr" -> pat = "Vertical Half (right) ";
+                                                case "hh" -> pat = "Horizontal Half (top) ";
+                                                case "hhb" -> pat = "Horizontal Half (bottom) ";
+                                                case "bl" -> pat = "Bottom Left Corner ";
+                                                case "br" -> pat = "Bottom Right Corner ";
+                                                case "tl" -> pat = "Top Left Corner ";
+                                                case "tr" -> pat = "Top Right Corner ";
+                                                case "bt" -> pat = "Bottom Triangle ";
+                                                case "tt" -> pat = "Top Triangle ";
+                                                case "bts" -> pat = "Bottom Triangle Sawtooth ";
+                                                case "tts" -> pat = "Top Triangle Sawtooth ";
+                                                case "mc" -> pat = "Middle Circle ";
+                                                case "mr" -> pat = "Middle Rhombus ";
+                                                case "bo" -> pat = "Border ";
+                                                case "cbo" -> pat = "Curly Border ";
+                                                case "bir" -> pat = "Brick ";
+                                                case "gra" -> pat = "Gradient";
+                                                case "gru" -> pat = "Gradient upside-down ";
+                                                case "cre" -> pat = "Creeper ";
+                                                case "sku" -> pat = "Skull";
+                                                case "flo" -> pat = "Flower";
+                                                case "moj" -> pat = "Mojang";
+                                                case "blb" -> pat = "Globe";
+                                                case "pig" -> pat = "Piglin";
                                                 
                                             }
                                             bannerPat.add("("+ col);
